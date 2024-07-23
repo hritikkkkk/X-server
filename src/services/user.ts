@@ -3,8 +3,6 @@ import JWTService from "./jwt";
 import { prismaClient } from "../client/db";
 import { GoogleTokenResult } from "../interfaces";
 
-
-
 class UserService {
   public static async verifyGoogleAuthToken(token: string) {
     const googleToken = token;
