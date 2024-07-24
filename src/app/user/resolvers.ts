@@ -1,3 +1,4 @@
+import { User } from "@prisma/client";
 import { prismaClient } from "../../client/db";
 import { GraphqlContext } from "../../interfaces";
 import UserService from "../../services/user";
@@ -16,4 +17,11 @@ const queries = {
   },
 };
 
-export const resolvers = { queries };
+const extraResolvers = {
+  User: {
+    tweets: (parent: User) =>
+      prismaClient.tweet.findMany({ where: { author: { id: parent.id } } }),
+  },
+};
+
+export const resolvers = { queries, extraResolvers };

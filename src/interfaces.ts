@@ -26,4 +26,9 @@ export interface GoogleTokenResult {
     alg?: string;
     kid?: string;
     typ?: string;
-  }
+}
+  
+export interface CreateTweet {
+  content: string;
+  imageURL?: string;
+}
