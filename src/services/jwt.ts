@@ -12,7 +12,7 @@ class JWTService {
     const token = JWT.sign(payload, serverConfig.JWT_SECRET as string);
     return token;
   }
-  
+
   public static decodeToken(token: string) {
     try {
       return JWT.verify(token, serverConfig.JWT_SECRET as string) as JWTUser;
