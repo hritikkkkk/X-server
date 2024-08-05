@@ -32,6 +32,10 @@ const extraResolvers = {
     following: async (parent: User) => {
       return FollowService.following(parent.id);
     },
+    recommendedUsers: async (parent: User, _: any, ctx: GraphqlContext) => {
+      if (!ctx.user) return [];
+      return FollowService.getRecommendedUsers(ctx.user.id);
+    },
   },
 };
 

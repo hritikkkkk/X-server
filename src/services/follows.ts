@@ -1,3 +1,4 @@
+import { User } from "@prisma/client";
 import { prismaClient } from "../client/db";
 
 class FollowService {
@@ -18,6 +19,34 @@ class FollowService {
       },
     });
     return result.map((res) => res.following);
+  }
+  public static async getRecommendedUsers(userId: string) {
+    const myFollowings = await prismaClient.follows.findMany({
+      where: {
+        follower: { id: userId },
+      },
+      include: {
+        following: {
+          include: { followers: { include: { following: true } } },
+        },
+      },
+    });
+
+    const users: User[] = [];
+
+    for (const followings of myFollowings) {
+      for (const followingOfFollowedUser of followings.following.followers) {
+        if (
+          followingOfFollowedUser.following.id !== userId &&
+          myFollowings.findIndex(
+            (e) => e?.followingId === followingOfFollowedUser.following.id
+          ) < 0
+        ) {
+          users.push(followingOfFollowedUser.following);
+        }
+      }
+    }
+    return users;
   }
 }
 
